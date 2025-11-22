@@ -1,32 +1,96 @@
+use clap::{Parser, Subcommand};
 use hound::*;
 
 mod effects;
 
-fn main() {
-    let input = "./source_wav/namtar_1.wav";
-    let output = "./source_wav/namtar_1_out.wav";
+/// RustTone command-line tool
+#[derive(Parser)]
+#[command(author, version, about)]
+struct Cli {
+    #[command(subcommand)]
+    command: Commands,
+}
 
-    // Read WAV
-    let mut reader = WavReader::open(input).expect("Cannot open WAV");
+#[derive(Subcommand)]
+enum Commands {
+    /// Single echo: y[n] = x[n] + a*x[n-R]
+    Single {
+        input: String,
+        output: String,
+        delay: usize,
+        a: f32,
+    },
+
+    /// Multiple echo: y[n] = x[n] + a*x[n-R] + 2a*x[n-2R] + ...
+    Multi {
+        input: String,
+        output: String,
+        delay: usize,
+        a: f32,
+        echoes: usize,
+    },
+}
+
+fn main() {
+    let cli = Cli::parse();
+
+    match cli.command {
+        Commands::Single {
+            input,
+            output,
+            delay,
+            a,
+        } => {
+            println!("Applying SINGLE echo...");
+            process_single(&input, &output, delay, a);
+        }
+
+        Commands::Multi {
+            input,
+            output,
+            delay,
+            a,
+            echoes,
+        } => {
+            println!("Applying MULTIPLE echo...");
+            process_multi(&input, &output, delay, a, echoes);
+        }
+    }
+}
+
+fn process_single(input: &str, output: &str, delay: usize, a: f32) {
+    let (spec, samples) = read_wav(input);
+    let processed = effects::single_echo(&samples, delay, a);
+    write_wav(output, spec, &processed);
+}
+
+fn process_multi(input: &str, output: &str, delay: usize, a: f32, echoes: usize) {
+    let (spec, samples) = read_wav(input);
+    let processed = effects::multiple_echo(&samples, delay, a, echoes);
+    write_wav(output, spec, &processed);
+}
+
+/// Read WAV -> Vec<f32>
+fn read_wav(path: &str) -> (WavSpec, Vec<f32>) {
+    let mut reader = WavReader::open(path).expect("cannot open input WAV");
     let spec = reader.spec();
+
     let samples: Vec<f32> = reader
         .samples::<i16>()
-        .map(|s| s.unwrap() as f32 / i16::MAX as f32)
+        .map(|x| x.unwrap() as f32 / i16::MAX as f32)
         .collect();
 
-    // ==== APPLY EFFECT HERE ====
-    // Single Echo
-    let processed = effects::single_echo(&samples, 8000, 0.5);
+    (spec, samples)
+}
 
-    // // Multiple Echo
-    // let processed = effects::multiple_echo(&samples, 8000, 0.5, 3);
+/// Write Vec<f32> -> WAV file
+fn write_wav(path: &str, spec: WavSpec, samples: &[f32]) {
+    let mut writer = WavWriter::create(path, spec).expect("cannot write output WAV");
 
-    // Write output WAV
-    let mut writer = WavWriter::create(output, spec).unwrap();
-    for s in processed {
+    for s in samples {
         let v = (s * i16::MAX as f32) as i16;
         writer.write_sample(v).unwrap();
     }
 
-    println!("Saved {}", output);
+    println!("Saved {}", path);
 }
