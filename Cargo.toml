@@ -8,7 +8,7 @@ hound = "3.5.0"
 clap = { version = "4.5.4", features = ["derive"] }
 tokio = { version = "1", features = ["full"] }
 axum = "0.6.9"
-multipart = "0.18"
+axum-extra = { version = "0.7.7", features = ["multipart"] }
 tower = "0.5"
 
 [[bin]]
