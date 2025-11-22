@@ -73,7 +73,7 @@ async fn process_wav(mut multipart: Multipart) -> impl IntoResponse {
         }
         "reverb" => {
             // เดี๋ยวค่อยทำ
-            effects::apply_multi(&input_path, &output_path)
+            effects::apply_reverb(&input_path, &output_path)
         }
         _ => effects::apply_echo(&input_path, &output_path),
     }
