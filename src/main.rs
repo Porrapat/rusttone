@@ -29,6 +29,11 @@ enum Commands {
         a: f32,
         echoes: usize,
     },
+
+    Reverb {
+        input: String,
+        output: String,
+    },
 }
 
 fn main() {
@@ -54,6 +59,18 @@ fn main() {
         } => {
             println!("Applying MULTIPLE echo...");
             process_multi(&input, &output, delay, a, echoes);
+        }
+
+        Commands::Reverb { input, output } => {
+            let (spec, samples) = read_wav(&input);
+
+            // ค่า R และ a แบบเบื้องต้น
+            let r = vec![700, 900, 600, 400, 450, 390];
+            let a = vec![0.6, 0.4, 0.2, 0.1, 0.7, 0.6, 0.8];
+
+            let out = effects::reverb(&samples, &r, &a);
+
+            write_wav(&output, spec, &out);
         }
     }
 }
