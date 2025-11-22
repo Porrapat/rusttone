@@ -1,14 +1,13 @@
 use axum::{
-    // extract::Multipart,
-    response::{IntoResponse, Html},
+    response::{IntoResponse},
     routing::{get, post},
+    extract::{DefaultBodyLimit},
     Router,
 };
 
 use axum_extra::extract::Multipart;
 
-use std::fs::{self, File};
-use std::io::Write;
+use std::fs::{self};
 use std::path::PathBuf;
 
 use axum::{
@@ -24,7 +23,8 @@ use rusttone::effects;
 async fn main() {
     let app = Router::new()
         .route("/", get(show_form))
-        .route("/process", post(process_wav));
+        .route("/process", post(process_wav))
+         .layer(DefaultBodyLimit::max(10 * 1024 * 1024));
 
     println!("🚀 Running on http://127.0.0.1:3000");
     axum::Server::bind(&"127.0.0.1:3000".parse().unwrap())
@@ -69,11 +69,11 @@ async fn process_wav(mut multipart: Multipart) -> impl IntoResponse {
         "echo" => effects::apply_echo(&input_path, &output_path),
         "multi" => {
             // เดี๋ยวเขียนให้เพิ่มทีหลัง
-            effects::apply_echo(&input_path, &output_path)
+            effects::apply_multi(&input_path, &output_path)
         }
         "reverb" => {
             // เดี๋ยวค่อยทำ
-            effects::apply_echo(&input_path, &output_path)
+            effects::apply_multi(&input_path, &output_path)
         }
         _ => effects::apply_echo(&input_path, &output_path),
     }

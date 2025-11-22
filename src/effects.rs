@@ -31,6 +31,35 @@ pub fn apply_echo(input: &std::path::Path, output: &std::path::Path) {
     }
 }
 
+pub fn apply_multi(input: &std::path::Path, output: &std::path::Path) {
+    let mut reader = WavReader::open(input).unwrap();
+    let spec = reader.spec();
+
+    // อ่าน WAV → f32
+    let samples: Vec<f32> = reader
+        .samples::<i16>()
+        .map(|s| s.unwrap() as f32)
+        .collect();
+
+    // ค่ามาตรฐาน (แก้ทีหลังจาก UI ได้)
+    let delay = (spec.sample_rate / 6) as usize;
+    let a: f32 = 0.5;
+    let n_echo = 4;
+
+    // ใช้ algorithm เดิมของเปา
+    let processed = multiple_echo(&samples, delay, a, n_echo);
+
+    // แปลงกลับ
+    let processed_i16: Vec<i16> = processed
+        .iter()
+        .map(|x| x.clamp(-32768.0, 32767.0) as i16)
+        .collect();
+
+    let mut writer = WavWriter::create(output, spec).unwrap();
+    for s in processed_i16 {
+        writer.write_sample(s).unwrap();
+    }
+}
 
 
 pub fn single_echo(samples: &Vec<f32>, delay: usize, a: f32) -> Vec<f32> {
