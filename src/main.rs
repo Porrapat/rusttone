@@ -62,15 +62,8 @@ fn main() {
         }
 
         Commands::Reverb { input, output } => {
-            let (spec, samples) = read_wav(&input);
-
-            // ค่า R และ a แบบเบื้องต้น
-            let r = vec![700, 900, 600, 400, 450, 390];
-            let a = vec![0.6, 0.4, 0.2, 0.1, 0.7, 0.6, 0.8];
-
-            let out = effects::reverb(&samples, &r, &a);
-
-            write_wav(&output, spec, &out);
+            println!("Applying Reverb echo...");
+            process_reverb(&input, &output);
         }
     }
 }
@@ -84,6 +77,18 @@ fn process_single(input: &str, output: &str, delay: usize, a: f32) {
 fn process_multi(input: &str, output: &str, delay: usize, a: f32, echoes: usize) {
     let (spec, samples) = read_wav(input);
     let processed = effects::multiple_echo(&samples, delay, a, echoes);
+    write_wav(output, spec, &processed);
+}
+
+fn process_reverb(input: &str, output: &str) {
+    let (spec, samples) = read_wav(input);
+
+    // Value r and a, just in basic
+    let r = vec![700, 900, 600, 400, 450, 390];
+    let a = vec![0.6, 0.4, 0.2, 0.1, 0.7, 0.6, 0.8];
+
+    let processed = effects::reverb(&samples, &r, &a);
+
     write_wav(output, spec, &processed);
 }
 
