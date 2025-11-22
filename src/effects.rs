@@ -28,12 +28,13 @@ pub fn multiple_echo(samples: &Vec<f32>, delay: usize, a: f32, n_echo: usize) ->
     out
 }
 
+#[allow(non_snake_case)]
 pub fn reverb(
     samples: &Vec<f32>,
     R: &[usize],   // delays
     a: &[f32],     // gains
 ) -> Vec<f32> {
-    // --- Comb filters (IIR echo) 4 ตัว ---
+    // --- Comb filters (IIR echo) 4 Sets ---
     let mut d1 = vec![0.0; samples.len()];
     let mut d2 = vec![0.0; samples.len()];
     let mut d3 = vec![0.0; samples.len()];
