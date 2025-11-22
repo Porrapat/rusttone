@@ -6,3 +6,15 @@ edition = "2024"
 [dependencies]
 hound = "3.5.0"
 clap = { version = "4.5.4", features = ["derive"] }
+tokio = { version = "1", features = ["full"] }
+axum = "0.6.9"
+multipart = "0.18"
+tower = "0.5"
+
+[[bin]]
+name = "rusttone"
+path = "src/main.rs"
+
+[[bin]]
+name = "rusttone-server"
+path = "src/bin/server.rs"
