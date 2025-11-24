@@ -1,3 +1,6 @@
+#![allow(non_snake_case)]
+#![allow(unused)]
+
 use hound::{WavReader, WavWriter};
 
 pub fn apply_echo(input: &std::path::Path, output: &std::path::Path) {
@@ -92,7 +95,6 @@ pub fn multiple_echo(samples: &Vec<f32>, delay: usize, a: f32, n_echo: usize) ->
     out
 }
 
-#[allow(non_snake_case)]
 pub fn reverb(
     samples: &Vec<f32>,
     R: &[usize],   // delays
