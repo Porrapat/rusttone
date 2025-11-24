@@ -5,6 +5,18 @@ It implements **Single Echo** and **Multiple Echo** effects based on classic DSP
 from academic Signal and Systems coursework. RustTone reads `.wav` audio files, processes them, and
 writes the output to a new `.wav` file.
 
+## ✨ Demos
+
+You can view demo at.
+
+https://rusttone.porrapat.com
+
+## 📄 Reference Paper
+
+This project’s DSP algorithms are derived from the academic paper referenced below:
+
+👉 [Paper Guitar Effect](https://github.com/Porrapat/rusttone/blob/master/paper_project_effect_guitar.pdf)
+
 ## ✨ Features
 
 - Read & write uncompressed WAV files using `hound`
@@ -22,7 +34,7 @@ writes the output to a new `.wav` file.
 Clone the repository:
 
 ```
-git clone https://github.com/yourname/rusttone.git
+git clone https://github.com/Porrapat/rusttone.git
 cd rusttone
 ```
 
@@ -127,13 +139,6 @@ Apply multiple echoes:
 ```
 rusttone multi guitar.wav guitar_multi.wav 6000 0.4 5
 ```
-
----
-
-## 💡 Tips
-- Reduce `a` if your output clips.
-- Lower `delay` if the echo spacing is too wide.
-- To simulate reverb-like behavior, increase echo count (`N = 10–30`).
 
 ---
 
