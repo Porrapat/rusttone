@@ -15,6 +15,7 @@ pub async fn show_form() -> Html<&'static str> {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RustTone - Upload WAV</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --miku-turquoise: #39c5bb;
@@ -33,7 +34,19 @@ pub async fn show_form() -> Html<&'static str> {
         }
 
         .container {
-            max-width: 600px;
+            max-width: 1200px;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 992px) {
+            .main-layout {
+                grid-template-columns: 1fr 1fr;
+            }
         }
 
         .card {
@@ -121,36 +134,96 @@ pub async fn show_form() -> Html<&'static str> {
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <div class="card-header text-center">
-                <h2>🎵 RustTone - Upload WAV</h2>
+    <div class="container py-4">
+        <div class="main-layout">
+            <!-- Left Column: Main Upload Form -->
+            <div>
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h2>🎵 RustTone - Upload WAV</h2>
+                    </div>
+                    <div class="card-body">
+                        <form action="/process" method="post" enctype="multipart/form-data">
+                            <div class="mb-4">
+                                <label for="fileUpload" class="form-label">Upload WAV:</label>
+                                <input type="file" class="form-control" id="fileUpload" name="file" required accept=".wav,audio/wav" />
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="effectSelect" class="form-label">Effect:</label>
+                                <select class="form-select" id="effectSelect" name="effect">
+                                    <option value="echo">Echo</option>
+                                    <option value="multi">Multiple Echo</option>
+                                    <option value="reverb">Reverb</option>
+                                </select>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Process Audio</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <form action="/process" method="post" enctype="multipart/form-data">
-                    <div class="mb-4">
-                        <label for="fileUpload" class="form-label">Upload WAV:</label>
-                        <input type="file" class="form-control" id="fileUpload" name="file" required accept=".wav,audio/wav" />
-                    </div>
 
-                    <div class="mb-4">
-                        <label for="effectSelect" class="form-label">Effect:</label>
-                        <select class="form-select" id="effectSelect" name="effect">
-                            <option value="echo">Echo</option>
-                            <option value="multi">Multiple Echo</option>
-                            <option value="reverb">Reverb</option>
-                        </select>
+            <!-- Right Column: Resources and Examples -->
+            <div>
+                <!-- Links Section -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="text-center mb-3" style="color: var(--miku-dark); font-weight: 600;">📚 Project Resources</h5>
+                        <div class="d-flex flex-column gap-2">
+                            <a href="https://github.com/Porrapat/rusttone" target="_blank" class="btn btn-outline-primary" style="border-color: var(--miku-turquoise); color: var(--miku-turquoise);">
+                                <i class="fab fa-github"></i> GitHub Repository
+                            </a>
+                            <a href="https://github.com/Porrapat/rusttone/blob/master/paper_project_effect_guitar.pdf" target="_blank" class="btn btn-outline-primary" style="border-color: var(--miku-turquoise); color: var(--miku-turquoise);">
+                                <i class="fas fa-file-pdf"></i> Project Paper
+                            </a>
+                        </div>
                     </div>
+                </div>
 
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-primary">Process Audio</button>
+                <!-- Example Files Section -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="text-center mb-3" style="color: var(--miku-dark); font-weight: 600;">🎼 Example Audio Files</h5>
+                        <p class="text-center text-muted small mb-3">Try these sample WAV files with different effects</p>
+                        <div class="d-flex flex-column gap-2">
+                            <a href="https://github.com/Porrapat/rusttone/raw/master/source_wav/destiny_1.wav" class="btn btn-sm btn-outline-secondary text-start" style="border-color: var(--miku-light); color: #666;">
+                                <i class="fas fa-download"></i> destiny_1.wav
+                            </a>
+                            <a href="https://github.com/Porrapat/rusttone/raw/master/source_wav/destiny_2.wav" class="btn btn-sm btn-outline-secondary text-start" style="border-color: var(--miku-light); color: #666;">
+                                <i class="fas fa-download"></i> destiny_2.wav
+                            </a>
+                            <a href="https://github.com/Porrapat/rusttone/raw/master/source_wav/fon_dtok_tee_nah_dtahng.wav" class="btn btn-sm btn-outline-secondary text-start" style="border-color: var(--miku-light); color: #666;">
+                                <i class="fas fa-download"></i> fon_dtok_tee_nah_dtahng.wav
+                            </a>
+                            <a href="https://github.com/Porrapat/rusttone/raw/master/source_wav/moom_1.wav" class="btn btn-sm btn-outline-secondary text-start" style="border-color: var(--miku-light); color: #666;">
+                                <i class="fas fa-download"></i> moom_1.wav
+                            </a>
+                            <a href="https://github.com/Porrapat/rusttone/raw/master/source_wav/moom_2.wav" class="btn btn-sm btn-outline-secondary text-start" style="border-color: var(--miku-light); color: #666;">
+                                <i class="fas fa-download"></i> moom_2.wav
+                            </a>
+                            <a href="https://github.com/Porrapat/rusttone/raw/master/source_wav/namtar_1.wav" class="btn btn-sm btn-outline-secondary text-start" style="border-color: var(--miku-light); color: #666;">
+                                <i class="fas fa-download"></i> namtar_1.wav
+                            </a>
+                            <a href="https://github.com/Porrapat/rusttone/raw/master/source_wav/namtar_2.wav" class="btn btn-sm btn-outline-secondary text-start" style="border-color: var(--miku-light); color: #666;">
+                                <i class="fas fa-download"></i> namtar_2.wav
+                            </a>
+                            <a href="https://github.com/Porrapat/rusttone/raw/master/source_wav/plook_jai_seua_pah.wav" class="btn btn-sm btn-outline-secondary text-start" style="border-color: var(--miku-light); color: #666;">
+                                <i class="fas fa-download"></i> plook_jai_seua_pah.wav
+                            </a>
+                            <a href="https://github.com/Porrapat/rusttone/raw/master/source_wav/big_wav_file.wav" class="btn btn-sm btn-outline-secondary text-start" style="border-color: var(--miku-light); color: #666;">
+                                <i class="fas fa-download"></i> big_wav_file.wav (This file is exceeds limit)
+                            </a>
+                        </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></>
 </body>
 </html>
 "#)
