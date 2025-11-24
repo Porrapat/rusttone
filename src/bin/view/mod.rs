@@ -165,33 +165,262 @@ pub async fn show_err_page(err: BoxError) -> impl IntoResponse {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Upload Error</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Error - RustTone</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --miku-turquoise: #39c5bb;
+            --miku-dark: #2a9d95;
+            --miku-light: #e8f9f8;
+            --miku-accent: #00d4c5;
+            --error-red: #ff6b9d;
+            --error-dark: #e74c7d;
+        }
+
         body {
-            font-family: sans-serif;
-            background: #f6f6f6;
-            padding: 40px;
+            background: linear-gradient(135deg, var(--miku-light) 0%, #ffffff 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            max-width: 600px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .error-card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(255, 107, 157, 0.25);
+            overflow: hidden;
+            background: white;
+        }
+
+        .error-header {
+            background: linear-gradient(135deg, var(--error-red) 0%, var(--error-dark) 100%);
+            color: white;
+            padding: 2.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .error-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.3;
+            }
+        }
+
+        .error-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: shake 0.5s ease-in-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .error-header h1 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .error-body {
+            padding: 2.5rem;
             text-align: center;
         }
-        .box {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            display: inline-block;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+
+        .error-message {
+            background: linear-gradient(135deg, #fff5f8 0%, #ffecf2 100%);
+            border-left: 4px solid var(--error-red);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.1);
         }
-        h1 {
-            color: #c00;
+
+        .error-message h3 {
+            color: var(--error-dark);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .error-message p {
+            color: #666;
+            margin: 0.5rem 0;
+            line-height: 1.6;
+        }
+
+        .file-size-info {
+            background: var(--miku-light);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            display: inline-block;
+        }
+
+        .file-size-info i {
+            color: var(--miku-turquoise);
+            margin-right: 0.5rem;
+        }
+
+        .file-size-info strong {
+            color: var(--miku-dark);
+        }
+
+        .btn-back {
+            background: linear-gradient(135deg, var(--miku-turquoise) 0%, var(--miku-accent) 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 0.875rem 2.5rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(57, 197, 187, 0.3);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(57, 197, 187, 0.4);
+            background: linear-gradient(135deg, var(--miku-dark) 0%, var(--miku-turquoise) 100%);
+            color: white;
+        }
+
+        .btn-back:active {
+            transform: translateY(0);
+        }
+
+        .btn-back i {
+            margin-right: 0.5rem;
+        }
+
+        .tips {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.25rem;
+            margin-top: 1.5rem;
+            text-align: left;
+        }
+
+        .tips h4 {
+            color: var(--miku-dark);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .tips ul {
+            margin: 0;
+            padding-left: 1.5rem;
+            color: #666;
+        }
+
+        .tips li {
+            margin: 0.5rem 0;
+            line-height: 1.5;
+        }
+
+        .decoration {
+            position: fixed;
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .decoration-1 {
+            top: 10%;
+            left: 5%;
+            font-size: 8rem;
+            color: var(--miku-turquoise);
+        }
+
+        .decoration-2 {
+            bottom: 10%;
+            right: 5%;
+            font-size: 6rem;
+            color: var(--error-red);
         }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h1>Upload Failed</h1>
-        <p>The file is too large or the connection was reset.</p>
-        <p>Please try again with a smaller file.</p>
-        <button onclick="window.history.back()">Go Back</button>
+    <i class="fas fa-music decoration decoration-1"></i>
+    <i class="fas fa-exclamation-triangle decoration decoration-2"></i>
+
+    <div class="container">
+        <div class="error-card">
+            <div class="error-header">
+                <div class="error-icon">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <h1>🎵 Upload Failed</h1>
+            </div>
+            <div class="error-body">
+                <div class="error-message">
+                    <h3><i class="fas fa-file-audio"></i> File Too Large!</h3>
+                    <p>The audio file exceeds the maximum allowed size.</p>
+                    <p>Please choose a smaller file and try again.</p>
+                </div>
+
+                <div class="file-size-info">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Maximum file size: 5 MB</strong>
+                </div>
+
+                <div class="mt-4">
+                    <a href="/" class="btn-back">
+                        <i class="fas fa-arrow-left"></i> Back to Upload
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
     "#))

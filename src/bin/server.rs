@@ -37,7 +37,7 @@ async fn main() {
 
 // Wrapper to manually check file size
 async fn process_wav_with_size_check(mut multipart: Multipart) -> AxumResponse {
-    const MAX_SIZE: usize = 10 * 1024 * 1024;
+    const MAX_SIZE: usize = 5 * 1024 * 1024;
     
     let mut effect = String::new();
     let mut wav_data = Vec::new();
