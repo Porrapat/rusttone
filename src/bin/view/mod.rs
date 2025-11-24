@@ -170,7 +170,7 @@ pub async fn show_form() -> Html<&'static str> {
                                 More effects and adjustments in the future.
                             </p>
                             <div style="font-size: 2rem;">
-                                <img src="https://raw.githubusercontent.com/Porrapat/rusttone/refs/heads/master/images/hasune_miku_happy.jpg?token=GHSAT0AAAAAADNJADHZXZLA66NO5E7QYSBM2JEHQWQ" width="250" />
+                                <img src="https://raw.githubusercontent.com/Porrapat/rusttone/refs/heads/master/images/hasune_miku_happy.jpg?token=GHSAT0AAAAAADDCKSLJUB7IXXECDEWGHUHG2JEILGQ" width="250" />
                             </div>
                         </div>
                     </div>

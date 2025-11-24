@@ -28,8 +28,8 @@ async fn main() {
         .route("/process", post(process_wav_with_size_check))
         .layer(DefaultBodyLimit::disable());
 
-    println!("🚀 Running on http://127.0.0.1:3000");
-    axum::Server::bind(&"127.0.0.1:3000".parse().unwrap())
+    println!("🚀 Running on http://0.0.0.0:3003");
+    axum::Server::bind(&"0.0.0.0:3003".parse().unwrap())
         .serve(app.into_make_service())
         .await
         .unwrap();
