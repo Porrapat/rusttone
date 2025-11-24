@@ -1,5 +1,8 @@
 use axum::{
     response::Html,
+    http::StatusCode,
+    response::IntoResponse,
+    BoxError,
 };
 
 pub async fn show_form() -> Html<&'static str> {
@@ -151,4 +154,45 @@ pub async fn show_form() -> Html<&'static str> {
 </body>
 </html>
 "#)
+}
+
+pub async fn show_err_page(err: BoxError) -> impl IntoResponse {
+    eprintln!("Error occurred: {}", err);
+    
+    (StatusCode::PAYLOAD_TOO_LARGE,
+    Html(r#"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Error</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #f6f6f6;
+            padding: 40px;
+            text-align: center;
+        }
+        .box {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            display: inline-block;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #c00;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>Upload Failed</h1>
+        <p>The file is too large or the connection was reset.</p>
+        <p>Please try again with a smaller file.</p>
+        <button onclick="window.history.back()">Go Back</button>
+    </div>
+</body>
+</html>
+    "#))
 }

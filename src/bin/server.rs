@@ -1,8 +1,8 @@
 use axum::{
-    response::{IntoResponse},
+    response::{IntoResponse, Response as AxumResponse},
     routing::{get, post},
-    extract::{DefaultBodyLimit},
     Router,
+    extract::DefaultBodyLimit,
 };
 
 use axum_extra::extract::Multipart;
@@ -19,12 +19,14 @@ mod view;
 use view::show_form;
 use rusttone::effects;
 
+use crate::view::show_err_page;
+
 #[tokio::main]
 async fn main() {
     let app = Router::new()
         .route("/", get(show_form))
-        .route("/process", post(process_wav))
-         .layer(DefaultBodyLimit::max(10 * 1024 * 1024));
+        .route("/process", post(process_wav_with_size_check))
+        .layer(DefaultBodyLimit::disable());
 
     println!("🚀 Running on http://127.0.0.1:3000");
     axum::Server::bind(&"127.0.0.1:3000".parse().unwrap())
@@ -33,30 +35,53 @@ async fn main() {
         .unwrap();
 }
 
-
-
-// -----------------------------------------------------------
-// 2) ประมวลผลไฟล์ WAV
-// -----------------------------------------------------------
-async fn process_wav(mut multipart: Multipart) -> impl IntoResponse {
+// Wrapper to manually check file size
+async fn process_wav_with_size_check(mut multipart: Multipart) -> AxumResponse {
+    const MAX_SIZE: usize = 10 * 1024 * 1024;
+    
     let mut effect = String::new();
     let mut wav_data = Vec::new();
-
-    // อ่าน multipart field
+    
     while let Some(field) = multipart.next_field().await.unwrap() {
-        // clone ชื่อ field มาซะ
         let name = field.name().unwrap().to_string();
-
+        
         match name.as_str() {
             "effect" => {
                 effect = field.text().await.unwrap();
             }
             "file" => {
-                wav_data = field.bytes().await.unwrap().to_vec();
+                // Read bytes and check size
+                match field.bytes().await {
+                    Ok(bytes) => {
+                        if bytes.len() > MAX_SIZE {
+                            return show_err_page(Box::new(std::io::Error::new(
+                                std::io::ErrorKind::Other,
+                                "File too large"
+                            ))).await.into_response();
+                        }
+                        wav_data = bytes.to_vec();
+                    }
+                    Err(_) => {
+                        return show_err_page(Box::new(std::io::Error::new(
+                            std::io::ErrorKind::Other,
+                            "File too large"
+                        ))).await.into_response();
+                    }
+                }
             }
             _ => {}
         }
     }
+    
+    process_wav(effect, wav_data).await.into_response()
+}
+
+
+
+// -----------------------------------------------------------
+// 2) ประมวลผลไฟล์ WAV
+// -----------------------------------------------------------
+async fn process_wav(effect: String, wav_data: Vec<u8>) -> impl IntoResponse {
 
     // สร้าง temp file
     let input_path = PathBuf::from("temp_in.wav");
@@ -89,4 +114,5 @@ async fn process_wav(mut multipart: Multipart) -> impl IntoResponse {
         .header(CONTENT_DISPOSITION, "attachment; filename=\"processed.wav\"")
         .body(Full::from(out))
         .unwrap()
+        .into_response()
 }
