@@ -30,6 +30,7 @@ enum Commands {
         echoes: usize,
     },
 
+    /// Reverb
     Reverb {
         input: String,
         output: String,

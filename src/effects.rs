@@ -1,30 +1,30 @@
 use hound::{WavReader, WavWriter};
 
 pub fn apply_echo(input: &std::path::Path, output: &std::path::Path) {
-    // 1. อ่าน WAV
+    // 1. Read WAV
     let mut reader = WavReader::open(input).expect("Failed to open WAV");
     let spec = reader.spec();
 
-    // 2. แปลง sample → f32
+    // 2. Convert sample → f32
     let samples: Vec<f32> = reader
         .samples::<i16>()
         .map(|s| s.unwrap() as f32)
         .collect();
 
-    // 3. ตั้งค่าตัวอย่าง (จะปรับ UI ทีหลัง)
-    let delay = (spec.sample_rate / 5) as usize; // ~200ms
-    let a: f32 = 0.5;
+    // 3. Sample Setting (We will make UI later)
+    let delay = 5000 as usize;
+    let a: f32 = 0.6;
 
-    // 4. ใช้ algorithm เดิมของเปา!
+    // 4. Use old algorithm!
     let processed_f32 = single_echo(&samples, delay, a);
 
-    // 5. แปลงกลับ i16
+    // 5. Convert back to i16
     let processed_i16: Vec<i16> = processed_f32
         .iter()
         .map(|x| x.clamp(-32768.0, 32767.0) as i16)
         .collect();
 
-    // 6. เขียน WAV ใหม่
+    // 6. Write WAV
     let mut writer = WavWriter::create(output, spec).unwrap();
     for s in processed_i16 {
         writer.write_sample(s).unwrap();
@@ -35,21 +35,21 @@ pub fn apply_multi(input: &std::path::Path, output: &std::path::Path) {
     let mut reader = WavReader::open(input).unwrap();
     let spec = reader.spec();
 
-    // อ่าน WAV → f32
+    // 1. Read WAV
     let samples: Vec<f32> = reader
         .samples::<i16>()
         .map(|s| s.unwrap() as f32)
         .collect();
 
-    // ค่ามาตรฐาน (แก้ทีหลังจาก UI ได้)
-    let delay = (spec.sample_rate / 6) as usize;
-    let a: f32 = 0.5;
-    let n_echo = 4;
+    // 3. Sample Setting (We will make UI later)
+    let delay = 6000 as usize;
+    let a: f32 = 0.4;
+    let n_echo = 5;
 
-    // ใช้ algorithm เดิมของเปา
+    // 4. Use old algorithm!
     let processed = multiple_echo(&samples, delay, a, n_echo);
 
-    // แปลงกลับ
+    // Convert back
     let processed_i16: Vec<i16> = processed
         .iter()
         .map(|x| x.clamp(-32768.0, 32767.0) as i16)
