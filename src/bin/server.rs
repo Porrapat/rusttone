@@ -7,6 +7,7 @@ use axum::{
     body::Body,
     http::{header::CONTENT_TYPE, header::CONTENT_DISPOSITION, Response},
 };
+use tower_http::services::ServeDir;
 
 use std::fs::{self};
 use std::path::PathBuf;
@@ -24,6 +25,7 @@ async fn main() {
     let app = Router::new()
         .route("/", get(show_form))
         .route("/process", post(process_wav_with_size_check))
+        .nest_service("/images", ServeDir::new("images"))
         .layer(DefaultBodyLimit::disable());
 
     let listener = TcpListener::bind("0.0.0.0:3003").await.unwrap();
