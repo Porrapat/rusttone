@@ -36,12 +36,13 @@ async fn main() {
         .unwrap();
 }
 
-// Wrapper to manually check file size
+// Wrapper to manually check file size and format
 async fn process_wav_with_size_check(mut multipart: Multipart) -> AxumResponse {
     const MAX_SIZE: usize = 5 * 1024 * 1024;
     
     let mut effect = String::new();
     let mut wav_data = Vec::new();
+    let mut filename = String::new();
     
     while let Some(field) = multipart.next_field().await.unwrap() {
         let name = field.name().unwrap().to_string();
@@ -51,13 +52,16 @@ async fn process_wav_with_size_check(mut multipart: Multipart) -> AxumResponse {
                 effect = field.text().await.unwrap();
             }
             "file" => {
+                // Get filename to check extension
+                filename = field.file_name().unwrap_or("").to_string();
+                
                 // Read bytes and check size
                 match field.bytes().await {
                     Ok(bytes) => {
                         if bytes.len() > MAX_SIZE {
                             return show_err_page(Box::new(std::io::Error::new(
                                 std::io::ErrorKind::Other,
-                                "File too large"
+                                "File too large or wrong format"
                             ))).await.into_response();
                         }
                         wav_data = bytes.to_vec();
@@ -65,7 +69,7 @@ async fn process_wav_with_size_check(mut multipart: Multipart) -> AxumResponse {
                     Err(_) => {
                         return show_err_page(Box::new(std::io::Error::new(
                             std::io::ErrorKind::Other,
-                            "File too large"
+                            "File too large or wrong format"
                         ))).await.into_response();
                     }
                 }
@@ -74,7 +78,44 @@ async fn process_wav_with_size_check(mut multipart: Multipart) -> AxumResponse {
         }
     }
     
+    // Check file extension
+    if !filename.to_lowercase().ends_with(".wav") {
+        return show_err_page(Box::new(std::io::Error::new(
+            std::io::ErrorKind::InvalidInput,
+            "File too large or wrong format"
+        ))).await.into_response();
+    }
+    
+    // Validate WAV file header (RIFF and WAVE)
+    if !is_valid_wav(&wav_data) {
+        return show_err_page(Box::new(std::io::Error::new(
+            std::io::ErrorKind::InvalidData,
+            "File too large or wrong format"
+        ))).await.into_response();
+    }
+    
     process_wav(effect, wav_data).await.into_response()
+}
+
+// Validate WAV file by checking RIFF and WAVE headers
+fn is_valid_wav(data: &[u8]) -> bool {
+    if data.len() < 12 {
+        return false;
+    }
+    
+    // Check for "RIFF" at bytes 0-3
+    let riff = &data[0..4];
+    if riff != b"RIFF" {
+        return false;
+    }
+    
+    // Check for "WAVE" at bytes 8-11
+    let wave = &data[8..12];
+    if wave != b"WAVE" {
+        return false;
+    }
+    
+    true
 }
 
 

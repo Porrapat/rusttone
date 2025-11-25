@@ -485,8 +485,8 @@ pub async fn show_err_page(err: BoxError) -> impl IntoResponse {
             </div>
             <div class="error-body">
                 <div class="error-message">
-                    <h3><i class="fas fa-file-audio"></i> File Too Large!</h3>
-                    <p>The audio file exceeds the maximum allowed size.</p>
+                    <h3><i class="fas fa-file-audio"></i> File Too Large or wrong file format!</h3>
+                    <p>The audio .wav file exceeds the maximum allowed size.</p>
                     <p>Please choose a smaller file and try again.</p>
                 </div>
 
