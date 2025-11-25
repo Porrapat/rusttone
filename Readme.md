@@ -58,6 +58,15 @@ The final binary is located at:
 target/release/rusttone
 ```
 
+## 📦 Server Installation
+
+Build the tool:
+
+```
+cargo build --release --bin rusttone-server
+```
+
+
 ---
 
 ## 🚀 Usage
