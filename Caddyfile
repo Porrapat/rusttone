@@ -1,0 +1,15 @@
+:80
+
+# Basic Auth
+# basicauth {
+#     admin $2a$14$L9pv19QLxeUhfB6.6UOAROVOy4JN8he9S3ECwRh5q5V2gpiagOxAO
+# }
+
+# Serve static files first
+handle_path /images/* {
+    root * ./images
+    file_server
+}
+
+# ส่งทุก request ไปที่ backend Axum
+reverse_proxy localhost:3003
