@@ -1,5 +1,13 @@
 # RustTone — Guitar Effect Processor (Rust CLI)
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Rust-1.90+-orange?logo=rust&logoColor=white" />
+  <img src="https://img.shields.io/badge/Axum-0.8+-blue?logo=rust&logoColor=white" />
+  <img src="https://img.shields.io/badge/Audio-DSP-brightgreen?logo=soundcloud&logoColor=white" />
+  <img src="https://img.shields.io/badge/License-MIT-yellow" />
+  <img src="https://img.shields.io/badge/Made_by-Porrapat_Petchdamrongskul-%23ff69b4" />
+</p>
+
 RustTone is a command-line tool for applying guitar audio effects using the Rust programming language.
 It implements **Single Echo** and **Multiple Echo** effects based on classic DSP principles derived
 from academic Signal and Systems coursework. RustTone reads `.wav` audio files, processes them, and
