@@ -381,7 +381,7 @@ pub async fn show_err_page(err: BoxError) -> impl IntoResponse {
             background: var(--miku-light);
             border-radius: 10px;
             padding: 1rem;
-            margin: 1.5rem 0;
+            margin: 0.2rem 0;
             display: inline-block;
         }
 
@@ -495,7 +495,7 @@ pub async fn show_err_page(err: BoxError) -> impl IntoResponse {
                     <strong>Maximum file size: 5 MB</strong>
                 </div>
 
-                <div class="mt-4">
+                <div class="mt-1">
                     <a href="/" class="btn-back">
                         <i class="fas fa-arrow-left"></i> Back to Upload
                     </a>
