@@ -131,6 +131,43 @@ pub async fn show_form() -> Html<&'static str> {
         .form-control::file-selector-button:hover {
             background-color: var(--miku-dark);
         }
+
+        input[type="range"] {
+            width: 100%;
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-runnable-track {
+            height: 6px;
+            background: #2ccfc3;
+            border-radius: 4px;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            background: #2ccfc3;
+            border-radius: 50%;
+            cursor: pointer;
+            margin-top: -4px;
+        }
+
+        input[type="range"]:hover::-webkit-slider-thumb,
+        input[type="range"]:active::-webkit-slider-thumb,
+        input[type="range"]:focus::-webkit-slider-thumb {
+            background: #2ccfc3;
+        }
+
+        input[type="range"]:hover::-webkit-slider-runnable-track,
+        input[type="range"]:active::-webkit-slider-runnable-track,
+        input[type="range"]:focus::-webkit-slider-runnable-track {
+            background: #2ccfc3;
+        }
+
     </style>
 </head>
 <body>
@@ -160,31 +197,33 @@ pub async fn show_form() -> Html<&'static str> {
 
                             <div class="mb-4">
                                 <div>
-                                    <label>
+                                    <div>
                                         Delay: <span id="delayValue">120</span> ms
-                                        <input
-                                            type="range"
-                                            id="delay"
-                                            min="1"
-                                            max="2000"
-                                            step="1"
-                                            value="120"
-                                        />
-                                    </label>
+                                    </div>
+
+                                    <input
+                                        type="range"
+                                        id="delay"
+                                        min="1"
+                                        max="2000"
+                                        step="1"
+                                        value="120"
+                                    />
                                 </div>
                                 
                                 <div>
-                                    <label>
+                                    <div>
                                         Feedback: <span id="feedbackValue">60%</span>
-                                        <input
-                                            type="range"
-                                            id="feedback"
-                                            min="0"
-                                            max="0.95"
-                                            step="0.01"
-                                            value="0.6"
-                                        />
-                                    </label>
+                                    </div>
+
+                                    <input
+                                        type="range"
+                                        id="feedback"
+                                        min="0"
+                                        max="0.95"
+                                        step="0.01"
+                                        value="0.6"
+                                    />
                                 </div>
                             </div>
 
