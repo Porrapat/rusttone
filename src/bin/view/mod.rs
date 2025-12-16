@@ -158,6 +158,57 @@ pub async fn show_form() -> Html<&'static str> {
                                 </select>
                             </div>
 
+                            <label>
+                                Delay: <span id="delayValue">120</span> ms
+                                <input
+                                    type="range"
+                                    id="delay"
+                                    min="1"
+                                    max="2000"
+                                    step="1"
+                                    value="120"
+                                />
+                            </label>
+
+                            <label>
+                                Feedback: <span id="feedbackValue">0.60</span>
+                                <input
+                                    type="range"
+                                    id="feedback"
+                                    min="0"
+                                    max="0.95"
+                                    step="0.01"
+                                    value="0.6"
+                                />
+                            </label>
+
+                            <script>
+                                const params = {
+                                    delay_ms: 120.0,
+                                    feedback: 0.6
+                                };
+
+                                const delay = document.getElementById("delay");
+                                const feedback = document.getElementById("feedback");
+
+                                delay.addEventListener("input", () => {
+                                    params.delay_ms = parseFloat(delay.value);
+                                    document.getElementById("delayValue").textContent = delay.value;
+                                    sendParams();
+                                });
+
+                                feedback.addEventListener("input", () => {
+                                    params.feedback = parseFloat(feedback.value);
+                                    document.getElementById("feedbackValue").textContent = feedback.value;
+                                    sendParams();
+                                });
+
+                                function sendParams() {
+                                    // ส่งไป Rust / WASM / server
+                                    console.log(params);
+                                }
+                            </script>
+
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary">Process Audio</button>
                             </div>
