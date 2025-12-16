@@ -170,7 +170,7 @@ pub async fn show_form() -> Html<&'static str> {
                                 More effects and adjustments in the future.
                             </p>
                             <div style="font-size: 2rem;">
-                                <img src="images/hasune_miku_happy.jpg" width="250" />
+                                <img style="margin-top:20px" src="images/hasune_miku_smile.png" width="250" />
                             </div>
                         </div>
                     </div>
@@ -200,29 +200,23 @@ pub async fn show_form() -> Html<&'static str> {
                         <h5 class="text-center mb-3" style="color: var(--miku-dark); font-weight: 600;">🎼 Example Audio Files</h5>
                         <p class="text-center text-muted small mb-3">Try these sample WAV files with different effects</p>
                         <div class="d-flex flex-column gap-2">
+                            <a href="https://github.com/Porrapat/rusttone/raw/master/source_wav/plook_jai_seua_pah.wav" class="btn btn-sm btn-outline-secondary text-start" style="border-color: var(--miku-light); color: #666;">
+                                <i class="fas fa-download"></i> ปลุกใจเสือป่า (plook_jai_seua_pah.wav)
+                            </a>
+                            <a href="https://github.com/Porrapat/rusttone/raw/master/source_wav/namtar_1.wav" class="btn btn-sm btn-outline-secondary text-start" style="border-color: var(--miku-light); color: #666;">
+                                <i class="fas fa-download"></i> น้ำตา 1 (namtar_1.wav)
+                            </a>
+                            <a href="https://github.com/Porrapat/rusttone/raw/master/source_wav/fon_dtok_tee_nah_dtahng.wav" class="btn btn-sm btn-outline-secondary text-start" style="border-color: var(--miku-light); color: #666;">
+                                <i class="fas fa-download"></i> ฝนตกที่หน้าต่าง (fon_dtok_tee_nah_dtahng.wav)
+                            </a>
+                            <a href="https://github.com/Porrapat/rusttone/raw/master/source_wav/moom.wav" class="btn btn-sm btn-outline-secondary text-start" style="border-color: var(--miku-light); color: #666;">
+                                <i class="fas fa-download"></i> มุม (moom.wav)
+                            </a>
                             <a href="https://github.com/Porrapat/rusttone/raw/master/source_wav/destiny_1.wav" class="btn btn-sm btn-outline-secondary text-start" style="border-color: var(--miku-light); color: #666;">
                                 <i class="fas fa-download"></i> พรหมลิขิต 1 (destiny_1.wav)
                             </a>
                             <a href="https://github.com/Porrapat/rusttone/raw/master/source_wav/destiny_2.wav" class="btn btn-sm btn-outline-secondary text-start" style="border-color: var(--miku-light); color: #666;">
                                 <i class="fas fa-download"></i> พรหมลิขิต 2 (destiny_2.wav)
-                            </a>
-                            <a href="https://github.com/Porrapat/rusttone/raw/master/source_wav/fon_dtok_tee_nah_dtahng.wav" class="btn btn-sm btn-outline-secondary text-start" style="border-color: var(--miku-light); color: #666;">
-                                <i class="fas fa-download"></i> ฝนตกที่หน้าต่าง (fon_dtok_tee_nah_dtahng.wav)
-                            </a>
-                            <a href="https://github.com/Porrapat/rusttone/raw/master/source_wav/moom_1.wav" class="btn btn-sm btn-outline-secondary text-start" style="border-color: var(--miku-light); color: #666;">
-                                <i class="fas fa-download"></i> มุม 1 (moom_1.wav)
-                            </a>
-                            <a href="https://github.com/Porrapat/rusttone/raw/master/source_wav/moom_2.wav" class="btn btn-sm btn-outline-secondary text-start" style="border-color: var(--miku-light); color: #666;">
-                                <i class="fas fa-download"></i> มุม 2 (moom_2.wav)
-                            </a>
-                            <a href="https://github.com/Porrapat/rusttone/raw/master/source_wav/namtar_1.wav" class="btn btn-sm btn-outline-secondary text-start" style="border-color: var(--miku-light); color: #666;">
-                                <i class="fas fa-download"></i> น้ำตา 1 (namtar_1.wav)
-                            </a>
-                            <a href="https://github.com/Porrapat/rusttone/raw/master/source_wav/namtar_2.wav" class="btn btn-sm btn-outline-secondary text-start" style="border-color: var(--miku-light); color: #666;">
-                                <i class="fas fa-download"></i> น้ำตา 2 (namtar_2.wav)
-                            </a>
-                            <a href="https://github.com/Porrapat/rusttone/raw/master/source_wav/plook_jai_seua_pah.wav" class="btn btn-sm btn-outline-secondary text-start" style="border-color: var(--miku-light); color: #666;">
-                                <i class="fas fa-download"></i> ปลุกใจเสือป่า (plook_jai_seua_pah.wav)
                             </a>
                             <a href="https://github.com/Porrapat/rusttone/raw/master/source_wav/big_wav_file.wav" class="btn btn-sm btn-outline-secondary text-start" style="border-color: var(--miku-light); color: #666;">
                                 <i class="fas fa-download"></i> ไฟล์นี่ใหญ่เกิน big_wav_file.wav (This file is exceeds limit)
