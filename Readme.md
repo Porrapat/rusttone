@@ -19,6 +19,8 @@ You can view demo at.
 
 https://rusttone.porrapat.com
 
+<img src="./screenshot1.png" alt="Demo Screenshot" width="640">
+
 ## 📄 Reference Paper
 
 This project’s DSP algorithms are derived from the academic paper referenced below:
