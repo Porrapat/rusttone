@@ -170,7 +170,7 @@ pub async fn show_form() -> Html<&'static str> {
                                 More effects and adjustments in the future.
                             </p>
                             <div style="font-size: 2rem;">
-                                <img style="margin-top:20px" src="images/hasune_miku_smile.png" width="250" />
+                                <img style="margin-top:20px" src="images/hasune_miku_2_smile.png" width="250" />
                             </div>
                         </div>
                     </div>
