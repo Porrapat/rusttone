@@ -158,29 +158,35 @@ pub async fn show_form() -> Html<&'static str> {
                                 </select>
                             </div>
 
-                            <label>
-                                Delay: <span id="delayValue">120</span> ms
-                                <input
-                                    type="range"
-                                    id="delay"
-                                    min="1"
-                                    max="2000"
-                                    step="1"
-                                    value="120"
-                                />
-                            </label>
-
-                            <label>
-                                Feedback: <span id="feedbackValue">0.60</span>
-                                <input
-                                    type="range"
-                                    id="feedback"
-                                    min="0"
-                                    max="0.95"
-                                    step="0.01"
-                                    value="0.6"
-                                />
-                            </label>
+                            <div class="mb-4">
+                                <div>
+                                    <label>
+                                        Delay: <span id="delayValue">120</span> ms
+                                        <input
+                                            type="range"
+                                            id="delay"
+                                            min="1"
+                                            max="2000"
+                                            step="1"
+                                            value="120"
+                                        />
+                                    </label>
+                                </div>
+                                
+                                <div>
+                                    <label>
+                                        Feedback: <span id="feedbackValue">60%</span>
+                                        <input
+                                            type="range"
+                                            id="feedback"
+                                            min="0"
+                                            max="0.95"
+                                            step="0.01"
+                                            value="0.6"
+                                        />
+                                    </label>
+                                </div>
+                            </div>
 
                             <script>
                                 const params = {
@@ -199,7 +205,9 @@ pub async fn show_form() -> Html<&'static str> {
 
                                 feedback.addEventListener("input", () => {
                                     params.feedback = parseFloat(feedback.value);
-                                    document.getElementById("feedbackValue").textContent = feedback.value;
+                                    // feedbackLabel.textContent = Math.round(value * 100) + "%";
+                                    // document.getElementById("feedbackValue").textContent = feedback.value;
+                                    document.getElementById("feedbackValue").textContent = Math.round(feedback.value * 100) + "%";
                                     sendParams();
                                 });
 
