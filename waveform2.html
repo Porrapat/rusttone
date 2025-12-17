@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Waveform Audio Player</title>
+<style>
+  body {
+    font-family: sans-serif;
+    padding: 20px;
+  }
+  canvas {
+    border: 1px solid #ccc;
+    width: 100%;
+    display: block;
+  }
+  #controls {
+    margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+
+<h2>🎵 Waveform Audio Player</h2>
+<input type="file" id="fileInput" accept=".wav,audio/wav" />
+
+<div id="controls">
+  <button id="playBtn" disabled>▶ Play</button>
+  <button id="pauseBtn" disabled>⏸ Pause</button>
+</div>
+
+<br>
+
+<canvas id="timeline" width="1000" height="30"></canvas>
+<canvas id="waveform" width="1000" height="200"></canvas>
+
+<script>
+const fileInput = document.getElementById('fileInput');
+const waveformCanvas = document.getElementById('waveform');
+const timelineCanvas = document.getElementById('timeline');
+const wCtx = waveformCanvas.getContext('2d');
+const tCtx = timelineCanvas.getContext('2d');
+
+const playBtn = document.getElementById('playBtn');
+const pauseBtn = document.getElementById('pauseBtn');
+
+let audioCtx;
+let audioBuffer;
+let sourceNode;
+let startTime = 0;
+let pauseOffset = 0;
+let isPlaying = false;
+
+fileInput.addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const arrayBuffer = await file.arrayBuffer();
+  audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+
+  drawTimeline();
+  drawWaveform();
+
+  playBtn.disabled = false;
+  pauseBtn.disabled = false;
+});
+
+playBtn.onclick = () => {
+  if (isPlaying) return;
+
+  sourceNode = audioCtx.createBufferSource();
+  sourceNode.buffer = audioBuffer;
+  sourceNode.connect(audioCtx.destination);
+
+  startTime = audioCtx.currentTime - pauseOffset;
+  sourceNode.start(0, pauseOffset);
+  isPlaying = true;
+
+  sourceNode.onended = () => {
+    isPlaying = false;
+    pauseOffset = 0;
+  };
+
+  requestAnimationFrame(drawPlayhead);
+};
+
+pauseBtn.onclick = () => {
+  if (!isPlaying) return;
+
+  sourceNode.stop();
+  pauseOffset = audioCtx.currentTime - startTime;
+  isPlaying = false;
+};
+
+function drawWaveform() {
+  const data = audioBuffer.getChannelData(0);
+  const width = waveformCanvas.width;
+  const height = waveformCanvas.height;
+  const step = Math.ceil(data.length / width);
+  const amp = height / 2;
+
+  wCtx.clearRect(0, 0, width, height);
+  wCtx.beginPath();
+  wCtx.strokeStyle = '#0077ff';
+
+  for (let i = 0; i < width; i++) {
+    let min = 1, max = -1;
+    for (let j = 0; j < step; j++) {
+      const v = data[i * step + j];
+      if (v < min) min = v;
+      if (v > max) max = v;
+    }
+    wCtx.moveTo(i, (1 + min) * amp);
+    wCtx.lineTo(i, (1 + max) * amp);
+  }
+  wCtx.stroke();
+}
+
+function drawTimeline() {
+  const duration = audioBuffer.duration;
+  const width = timelineCanvas.width;
+
+  tCtx.clearRect(0, 0, width, 30);
+  tCtx.fillStyle = '#000';
+  tCtx.font = '12px sans-serif';
+
+  const seconds = Math.ceil(duration);
+  for (let s = 0; s <= seconds; s++) {
+    const x = (s / duration) * width;
+    tCtx.fillRect(x, 20, 1, 10);
+    tCtx.fillText(`${s}s`, x + 2, 12);
+  }
+}
+
+function drawPlayhead() {
+  if (!isPlaying) return;
+
+  const elapsed = audioCtx.currentTime - startTime;
+  const x = (elapsed / audioBuffer.duration) * waveformCanvas.width;
+
+  drawWaveform();
+
+  wCtx.strokeStyle = 'red';
+  wCtx.beginPath();
+  wCtx.moveTo(x, 0);
+  wCtx.lineTo(x, waveformCanvas.height);
+  wCtx.stroke();
+
+  if (elapsed < audioBuffer.duration) {
+    requestAnimationFrame(drawPlayhead);
+  }
+}
+</script>
+
+</body>
+</html>
