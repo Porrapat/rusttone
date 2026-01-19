@@ -27,6 +27,13 @@ This project’s DSP algorithms are derived from the academic paper referenced b
 
 👉 [Paper Guitar Effect](https://github.com/Porrapat/rusttone/blob/master/paper_project_effect_guitar.pdf)
 
+## Dedication
+
+> **Dedicated to Prof. Bundit Thipakorn,**  
+> whose course was the hardest boss fight of my bachelor’s degree.  
+> I barely passed back then —  
+> but years later, it respawned… in Rust. 🦀
+
 ## ✨ Features
 
 - Read & write uncompressed WAV files using `hound`
