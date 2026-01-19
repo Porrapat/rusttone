@@ -161,6 +161,23 @@ rusttone multi guitar.wav guitar_multi.wav 6000 0.4 5
 
 ---
 
+## AI Tools Used
+
+I use multiple AI tools:
+
+- **ChatGPT**  
+  Used for ideas, inspiration, conceptual discussions.
+
+- **Gemini**  
+  Used for generating visual assets such as logos and illustrative images.
+
+- **Claude (via OpenRouter, VSCode + Cline)**  
+  Used as the primary coding assistant.
+
+All outputs from AI tools were reviewed, tested, and manually integrated by me.
+
+---
+
 ## 🧑‍💻 Author
 
 This project was developed collaboratively with ChatGPT as part of modernizing
